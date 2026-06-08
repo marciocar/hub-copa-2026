@@ -100,7 +100,11 @@ O Onion Portable não é um gerador de código descontrolado. Ele segue regras e
 Como o Onion lida com a documentação depende inteiramente do seu ambiente:
 
 **Se você está em um Web Chat restrito (Cenário A):**
-Sempre que a IA encerrar uma tarefa estrutural, ela vai gerar um bloco de código. **É sua obrigação como "Usuário-Sistema-de-Arquivos"** copiar esse texto, salvar no seu arquivo `.md` no seu computador e fazer o upload da versão mais atualizada se o chat for reiniciado.
+Como a IA não pode editar seus arquivos locais diretamente, a entrega de múltiplos arquivos se adapta dinamicamente à plataforma utilizada:
+*   **ChatGPT (com Code Interpreter):** A IA cria a estrutura de pastas internamente e gera um arquivo `.zip` para você baixar e descompactar na raiz do seu projeto.
+*   **Claude (com Artifacts):** A IA disponibiliza os arquivos em blocos de artefatos interativos individuais para fácil download.
+*   **Outros Chats (como Gemini):** A IA gera o conteúdo `.md` completo dentro de blocos de código separados. Sua tarefa é copiar e salvar nos caminhos indicados.
+*   *Resumo:* A IA sempre acompanhará a entrega com um resumo sintético rápido para facilitar a leitura das alterações.
 
 **Se você está em uma IDE Agêntica (Cenário B — Antigravity, Cursor):**
 Você não precisa copiar nada! A IA tem permissão de escrita. Ela vai te mostrar o que planeja fazer, pedir a sua confirmação e, uma vez aprovada, **ela mesma vai editar e gravar o arquivo diretamente no seu projeto.** Apenas relaxe e deixe o motor trabalhar.

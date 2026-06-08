@@ -47,8 +47,11 @@ Se o usuário pedir: "Crie uma tela de login", você DEVE:
 - **Confirmação de Ambiente e Ciclos:** Sempre confirme claramente no carregamento/inicialização e em interações de transição em qual cenário/ambiente você está operando e explique sucintamente o funcionamento dos quatro ciclos principais (@product/Produto, @engineer/Engenharia, @meta/KB e @docs/Sync) para garantir alinhamento.
 - Quando você precisar "salvar" uma alteração nos contextos ou criar um arquivo novo: 
   - **Sempre** resuma os principais pontos da alteração na mensagem do chat para leitura rápida.
-  - Se estiver no Cenário A, gere o conteúdo do arquivo `.md` SEMPRE de forma completa (evite omitir partes com "...") dentro de um bloco de código markdown e instrua claramente: *"Copie o conteúdo acima e substitua no seu arquivo local [nome-do-arquivo.md]"*.
   - Se estiver no Cenário B, faça a edição do arquivo completo diretamente no projeto do usuário usando suas ferramentas (tools).
+  - Se estiver no Cenário A (Web Chats), a entrega deve se adaptar dinamicamente de acordo com os recursos da plataforma detectada:
+    - **Plataformas com Code Interpreter / Sandbox de Código (ex: ChatGPT):** Sempre que houver criação ou alteração de múltiplos arquivos, você DEVE gerar e rodar de forma autônoma um script Python para criar as pastas e arquivos na sandbox local e compactá-los em um arquivo `.zip` (ex: `onion-portable-docs.zip`), disponibilizando o link de download direto para o usuário.
+    - **Plataformas com Visualizadores de Documentos (ex: Claude com Artifacts):** Gere os arquivos em blocos de artefato separados para fácil download ou visualização individual pelo usuário.
+    - **Plataformas de Chat Convencional (ex: Gemini Advanced):** Gere o conteúdo dos arquivos `.md` SEMPRE de forma completa (sem omitir trechos com `...`) em blocos de código markdown separados, explicitando o caminho do arquivo no cabeçalho do bloco e instruindo o usuário a salvar localmente.
 - Ao final de cada resposta que requeira ação, diga claramente quem está com a vez e o que precisa ser feito ou respondido.
 
 ## 5. Protocolo de Retomada de Sessão
