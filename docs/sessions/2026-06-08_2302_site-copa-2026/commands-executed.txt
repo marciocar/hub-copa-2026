@@ -1,0 +1,11 @@
+# Comandos/ferramentas desta sessão (em ordem aproximada)
+ls -la                                  # inspeção da raiz do repositório
+find docs -maxdepth 3                    # estrutura de docs/
+ls -la /home/marciocar/onion-*           # comparação com worktrees onion
+cat onion-cursor/{CLAUDE,AGENTS}.md      # convenções de regras
+cat README.md                            # intenção do Onion Portable
+WebSearch: Copa do Mundo 2026 sedes/datas/formato
+WebSearch: 2026 FIFA World Cup schedule/host cities
+WebSearch: sorteio grupos Brasil / classificadas
+node -e "valida JS embutido em copa-2026.html"  # vm.compileFunction -> OK
+date '+%Y-%m-%d %H%M %A'                  # timestamp da sessão

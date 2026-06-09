@@ -1,0 +1,12 @@
+CLAUDE.md
+copa-2026.html
+docs/business-context-lite.md
+docs/technical-context-lite.md
+docs/knowledge-base/copa-do-mundo-2026.md
+docs/sessions/README.md
+docs/sessions/2026-06-08_2302_site-copa-2026/README.md
+docs/sessions/2026-06-08_2302_site-copa-2026/context.md
+docs/sessions/2026-06-08_2302_site-copa-2026/decisions.md
+docs/sessions/2026-06-08_2302_site-copa-2026/changes.md
+docs/sessions/2026-06-08_2302_site-copa-2026/notes.md
+docs/sessions/2026-06-08_2302_site-copa-2026/commands-executed.txt

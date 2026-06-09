@@ -8,7 +8,8 @@ Este diretório armazena o histórico e o progresso de cada sessão de desenvolv
 
 | ID | Data e Hora | Tópico/Funcionalidade | Objetivo Principal | Link |
 |---|---|---|---|---|
-| - | - | - | - | - |
+| 001 | 2026-06-08 23:02 | site-copa-2026 | Site HTML único (premium) da Copa 2026 + specs Spec-as-Code | [Abrir](./2026-06-08_2302_site-copa-2026/README.md) |
+| 002 | 2026-06-08 23:23 | redesign-premium-e-dados-completos | Redesign premium (dark/glass), dados completos online e fix de bandeiras no Windows | [Abrir](./2026-06-08_2323_redesign-premium-e-dados-completos/README.md) |
 
 
 ---
