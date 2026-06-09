@@ -26,8 +26,11 @@ vibrante/festivo sobre a Copa do Mundo FIFA 2026 (EUA/México/Canadá).
 | F-03 | Calendário e sedes | Feito | Calendário até a final + 16 estádios reais por país |
 | F-04 | Simulador de palpites/bracket | Feito | 6 jogos do Grupo C; salva em localStorage |
 | F-05 | Tema/estilo vibrante festivo | Feito | Cores fortes, tipografia grande, microanimações |
-| F-06 | Elevar site a nível Awwwards SOTD | Em progresso | Candidatura a Site of the Day; foco em Creativity + Acessibilidade |
-| F-07 | "O Caminho do Brasil até a taça" (conceito) | Em progresso | Chaveamento vivo: palpites propagam e geram card compartilhável da SUA Copa |
+| F-06 | Elevar site a nível Awwwards SOTD | Feito | A11y (ARIA tabs+teclado, foco, contraste AA), hero interativo, microinterações |
+| F-07 | "O Caminho do Brasil até a taça" (conceito) | Feito | Chaveamento vivo a partir dos palpites do Grupo C; hype, troféu, takeover campeão |
+| F-08 | Mata-mata editável "GOLD" | Feito | Escolher adversário (modal+busca, anti-trapaça), placar e pênaltis no empate |
+| F-09 | Compartilhamento (card + QR + og:image) | Feito | Card canvas com placares; QR do site; PNG download; preview social og/twitter |
+| F-10 | Bastidores + publicação | Feito | Case study Spec-as-Code, ecossistema, GitHub Pages, versões (v1–v6) linkadas |
 
 ## 4. Especificações Ativas (Em Detalhe)
 
@@ -95,3 +98,25 @@ vibrante/festivo sobre a Copa do Mundo FIFA 2026 (EUA/México/Canadá).
   - A escada mostra claramente avanço/eliminação e o ponto final da jornada.
   - Botão gera e baixa um PNG legível da "Minha Copa".
   - Estado persistido em localStorage; respeita reduced-motion; mantém single-file/offline.
+
+### F-08 — Mata-mata editável "GOLD"
+- **Como** torcedor, **quero escolher o adversário** de cada fase, **lançar o placar** e, em
+  caso de empate, **decidir nos pênaltis**, **para** montar minha campanha com realismo.
+- **Regras:** seletor de adversário em modal com busca e **sugestões por fase**; trava
+  **anti-trapaça** (não aparece o Brasil; não repete/retorna quem já foi enfrentado). Mata-mata
+  não pode empatar → pênaltis decidem. Só o jogo atual é editável; "↩ refazer" limpa os seguintes.
+- **Aceite:** mudar placar/adversário recalcula avanço/eliminação e libera a próxima fase;
+  empate sem pênaltis fica pendente; vencer a final dispara o campeão.
+
+### F-09 — Compartilhamento (card + QR + og:image)
+- **Como** torcedor, **quero gerar e baixar um card** da minha Copa com **QR do site**, **para**
+  compartilhar. **Como** dono, **quero** que o link do site tenha **preview social**.
+- **Regras:** card em `<canvas>` com placares de cada fase + QR estático (pré-gerado, offline);
+  download PNG. `og:image`/`twitter:image` apontam para `og-card.png`.
+- **Aceite:** QR escaneia para a URL do site; PNG baixa; compartilhar o link mostra o card.
+
+### F-10 — Bastidores + publicação
+- **Como** dono, **quero** uma seção "Como foi feito" (estratégia Spec-as-Code, evolução das
+  versões com links, ecossistema) e o projeto **público no GitHub Pages**.
+- **Aceite:** seção Bastidores com 5 passos + cards de versão (v1–v6) clicáveis + créditos
+  (Onion Portable, Marcio Carvalho, Grana.Ai, Arandek, Sacola de Ideias); site no ar.

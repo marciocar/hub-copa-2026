@@ -87,6 +87,26 @@ Tudo em `copa-2026.html`, sem dependências. Reaproveita os 6 palpites do Grupo 
    `toBlob`/download PNG. Sem libs. Fallback se canvas indisponível.
 6. **A11y/motion** — controles com `aria`; animações de acendimento respeitam reduced-motion.
 
+### Plano F-08/F-09/F-10 — Mata-mata GOLD, compartilhamento e publicação (2026-06-09)
+- **Modelo de dados do mata-mata:** `copa2026:road = { r32:{opp,gh,ga,ph,pa}, ... }`.
+  `stageOutcome(s)` → `empty|pending|pending-pens|win|lose` (empate exige pênaltis ≠).
+  `availableTeams(idx)` aplica anti-trapaça (exclui Brasil e adversários já usados).
+  **Migração:** `loadRoad()` descarta valores não-objeto (formato antigo `'win'/'lose'`) —
+  corrige `Cannot create property 'opp' on string`.
+- **Seletor de adversário:** modal `#opp-modal` (busca + `SUGGEST` por fase). Inputs de placar
+  com update **ao vivo** no `input` (sem rerender, preserva foco) e rerender no `change`.
+- **QR no card:** `QR_MATRIX` estática (29×29, nível M) pré-gerada para a URL; `drawQR()` pinta
+  no canvas — sem encoder/lib em runtime. Verificado decodificando com jsQR.
+- **Preview social:** `og:image`/`twitter:image` → `og-card.png` (card gerado pela própria
+  `drawShareCard`, 1080×1080) na raiz do site.
+- **Versionamento:** snapshots em `versoes/NN-*.html` (atual = v6); cards linkados na seção
+  Bastidores. Cada mudança grande vira nova versão (não sobrescrever).
+- **Deploy/publicação:** repo público `marciocar/hub-copa-2026`; **GitHub Pages** servindo
+  `main` na raiz (`index.html` = cópia de `copa-2026.html`). Workflow: editar canônico → copiar
+  p/ `index.html` + `versoes/06` → commit → push → conferir Pages via `curl` cache-bustado.
+- **Verificação:** testes em **Chrome headless** (`~/.cache/puppeteer/.../chrome` via
+  `puppeteer-core`) cobrindo seleção, pênaltis, anti-trapaça, campeão, download e leitura do QR.
+
 **Nota de dados (atualizado em 2026-06-08):** todos os 12 grupos (A–L) e as 48 seleções
 foram preenchidos com o sorteio final da FIFA (05/12/2025), confirmado em duas fontes
 (página do sorteio na Wikipédia + busca FIFA). Estádios reais por cidade e calendário do
