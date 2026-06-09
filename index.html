@@ -551,9 +551,10 @@
     </div>
 
     <div class="road-cta">
-      <button class="btn btn-primary" id="share-btn" disabled>Gerar o card da minha Copa 🏆</button>
+      <button class="btn btn-primary" id="next-btn">Ir para o próximo jogo ↓</button>
+      <button class="btn btn-ghost" id="share-btn" disabled>Gerar o card 🏆</button>
       <button class="btn btn-ghost" id="sound-btn" aria-pressed="false">🔇 Ativar som</button>
-      <span class="road-locked" id="road-locked">Classifique o Brasil e leve-o até a final para liberar o card.</span>
+      <span class="road-locked" id="road-locked">Decida cada mata-mata; ao fim, gere o card da sua Copa.</span>
     </div>
   </div>
 </section>
@@ -1050,6 +1051,7 @@ function renderRoad(){
   const txtEl = document.getElementById('rs-txt');
   const ladder = document.getElementById('ladder');
   const shareBtn = document.getElementById('share-btn');
+  const nextBtn = document.getElementById('next-btn');
   const lockedEl = document.getElementById('road-locked');
   const r = loadRoad();
 
@@ -1059,8 +1061,10 @@ function renderRoad(){
     posEl.textContent = '—';
     txtEl.innerHTML = 'Preencha os <strong>6 palpites do Grupo C</strong> acima para o Brasil entrar em campo.';
     ladder.innerHTML = '';
-    shareBtn.disabled = true;
-    lockedEl.textContent = 'Complete os palpites do Grupo C para liberar o card.';
+    shareBtn.disabled = true; shareBtn.classList.add('btn-ghost'); shareBtn.classList.remove('btn-primary');
+    nextBtn.hidden = false; nextBtn.textContent = 'Completar meus palpites ↑';
+    nextBtn.classList.add('btn-primary'); nextBtn.classList.remove('btn-ghost');
+    lockedEl.textContent = 'Complete os 6 palpites do Grupo C para o Brasil entrar em campo.';
     return;
   }
 
@@ -1169,13 +1173,20 @@ function renderRoad(){
       : 'A taça espera no MetLife';
   }
 
-  // habilita card quando há um desfecho contável (sempre que grupo completo)
-  shareBtn.disabled = false;
+  // botões: enquanto há jogo a decidir, o destaque é "próximo jogo"; ao concluir, vira "gerar card"
   const s = roadSummary();
+  const concluded = s.state === 'champion' || s.state === 'eliminated' || s.state === 'group-out';
+  shareBtn.disabled = false;
+  shareBtn.textContent = concluded ? 'Gerar o card da minha Copa 🏆' : 'Gerar o card 🏆';
+  shareBtn.classList.toggle('btn-primary', concluded);
+  shareBtn.classList.toggle('btn-ghost', !concluded);
+  nextBtn.hidden = concluded;                 // sem mais jogos a seguir quando concluído
+  if(!concluded){ nextBtn.textContent = 'Ir para o próximo jogo ↓'; nextBtn.classList.add('btn-primary'); nextBtn.classList.remove('btn-ghost'); }
+
   if(s.state === 'champion') lockedEl.textContent = '🏆 Hexa! Gere e compartilhe o card da sua Copa.';
   else if(s.state === 'group-out') lockedEl.textContent = 'Mesmo eliminado, você pode gerar o card da sua Copa.';
   else if(s.state === 'eliminated') lockedEl.textContent = 'Jornada encerrada — gere o card de como foi a sua Copa.';
-  else lockedEl.textContent = 'Decida os mata-matas ou gere o card da campanha até aqui.';
+  else lockedEl.textContent = 'Decida o jogo destacado acima. Ao fim, gere o card da sua Copa.';
 
   // dispara o campeão por último (não pode abortar o resto do render) — re-arma se refizer
   if(sum.state === 'champion'){
@@ -1283,6 +1294,18 @@ function buildRoad(){
   oppModal.addEventListener('click', e => { if(e.target === oppModal) closeOppPicker(); });
   document.addEventListener('keydown', e => { if(e.key==='Escape') closeOppPicker(); });
 
+  // "próximo jogo": rola até a fase ativa (ou aos palpites se ainda falta classificar)
+  document.getElementById('next-btn').addEventListener('click', () => {
+    const cur = document.querySelector('.rung.current');
+    if(cur){
+      cur.scrollIntoView({behavior:'smooth', block:'center'});
+      const f = cur.querySelector('.opp-btn, input'); if(f) setTimeout(() => f.focus(), 450);
+    } else {
+      const target = roadSummary().state === 'incomplete' ? document.getElementById('palpites') : document.getElementById('trophy-goal');
+      if(target) target.scrollIntoView({behavior:'smooth', block:'center'});
+    }
+  });
+
   // toggle de som
   const soundBtn = document.getElementById('sound-btn');
   let savedSound = '0'; try{ savedSound = localStorage.getItem('copa2026:sound') || '0'; }catch(e){}
@@ -1378,9 +1401,12 @@ function drawShareCard(){
     ly += rh + gap;
   });
 
-  // rodapé
-  x.textAlign='center'; x.fillStyle='#8b95bd'; x.font='600 28px Inter, system-ui, sans-serif';
-  x.fillText('Hub da Copa 2026 · feito com ⚽ pelo Onion Portable', W/2, H-60);
+  // rodapé com o LINK do site (para quando o card for compartilhado)
+  x.textAlign='center';
+  x.fillStyle='#8b95bd'; x.font='600 26px Inter, system-ui, sans-serif';
+  x.fillText('Hub da Copa 2026 · feito com ⚽ pelo Onion Portable', W/2, H-86);
+  x.fillStyle='#1fd17a'; x.font='800 34px Inter, system-ui, sans-serif';
+  x.fillText('▶  marciocar.github.io/hub-copa-2026', W/2, H-40);
 }
 function downloadShareCard(){
   const c = document.getElementById('share-canvas');
