@@ -194,19 +194,17 @@
   .m-city{font-size:.82rem;color:var(--muted);text-align:right;font-weight:600;max-width:220px}
   @media(max-width:560px){.match{grid-template-columns:64px 1fr}.m-city{grid-column:1/-1;text-align:left}}
 
-  /* HOSTS */
-  .host-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem}
-  @media(max-width:820px){.host-grid{grid-template-columns:1fr}}
-  .host-card{background:var(--card);border:1px solid var(--card-brd);border-radius:var(--radius);overflow:hidden;backdrop-filter:blur(8px);transition:.25s}
-  .host-card:hover{transform:translateY(-5px);box-shadow:var(--shadow)}
-  .host-card h4{padding:1.2rem 1.4rem;font-size:1.25rem;font-weight:800;display:flex;align-items:center;gap:.6rem;border-bottom:1px solid var(--card-brd)}
-  .host-card.usa h4{background:linear-gradient(120deg,rgba(43,107,255,.25),transparent)}
-  .host-card.mex h4{background:linear-gradient(120deg,rgba(31,209,122,.25),transparent)}
-  .host-card.can h4{background:linear-gradient(120deg,rgba(255,77,141,.22),transparent)}
-  .host-card ul{list-style:none;padding:.8rem 1.4rem 1.2rem}
-  .host-card li{padding:.6rem 0;border-bottom:1px dashed var(--card-brd);font-weight:700;font-size:.96rem}
-  .host-card li:last-child{border:0}
-  .host-card .stad{color:var(--muted);font-weight:500;font-size:.82rem;display:block;margin-top:.1rem}
+  /* HOSTS — grid equilibrado de 16 cidades (sem coluna comprida/espaço vazio) */
+  .host-legend{display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:1.4rem}
+  .host-legend .pill{display:inline-flex;align-items:center;gap:.45rem;font-size:.82rem;font-weight:700;
+    padding:.4rem .8rem;border-radius:999px;background:var(--card);border:1px solid var(--card-brd);backdrop-filter:blur(8px)}
+  .host-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:1rem}
+  .venue{position:relative;background:var(--card);border:1px solid var(--card-brd);border-left:4px solid var(--c,var(--blue));
+    border-radius:var(--radius-sm);padding:1.05rem 1.2rem;backdrop-filter:blur(8px);transition:.22s}
+  .venue:hover{transform:translateY(-4px);border-color:rgba(255,255,255,.2);box-shadow:var(--shadow)}
+  .venue-top{display:flex;align-items:center;gap:.55rem;margin-bottom:.5rem}
+  .venue-city{font-weight:800;font-size:1.02rem;letter-spacing:-.01em;line-height:1.15}
+  .venue-stad{color:var(--muted);font-size:.85rem;font-weight:600}
 
   /* PREDICTIONS */
   .pred-intro{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:1.6rem}
@@ -506,6 +504,7 @@
     <span class="eyebrow">Onde acontece</span>
     <h2 class="section-title">16 cidades-sede</h2>
     <p class="section-sub">Três países, três regiões. Abertura no <strong>Estádio Azteca</strong> (Cidade do México) e final no <strong>MetLife</strong> (Nova Jersey).</p>
+    <div class="host-legend" id="host-legend"></div>
     <div class="host-grid" id="host-grid"></div>
   </div>
 </section>
@@ -666,6 +665,7 @@
       <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 2-.27c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
       Ver código no GitHub
     </a>
+    <div style="margin-top:1rem;font-size:.78rem;color:var(--muted-2);letter-spacing:.04em">build <strong style="color:var(--green)">v5 · GOLD</strong> · mata-mata editável (escolher adversário + placar + pênaltis)</div>
   </div>
 </footer>
 
@@ -828,11 +828,18 @@ function buildSchedule(){
 
 /* ---------------- HOSTS ---------------- */
 function buildHosts(){
-  document.getElementById('host-grid').innerHTML = Object.entries(HOSTS).map(([k,c]) => `
-    <div class="host-card ${k}">
-      <h4><span class="flag-badge" style="--c:${c.color}">${c.code}</span> ${c.name}</h4>
-      <ul>${c.cities.map(([city,stad]) => `<li><strong>${city}</strong><span class="stad">${stad}</span></li>`).join('')}</ul>
-    </div>`).join('');
+  // legenda dos 3 países
+  const legend = document.getElementById('host-legend');
+  if(legend) legend.innerHTML = Object.values(HOSTS).map(c =>
+    `<span class="pill"><span class="flag-badge" style="--c:${c.color}">${c.code}</span> ${c.name}</span>`).join('');
+  // grid plano de 16 cidades (equilibrado)
+  const cards = [];
+  Object.values(HOSTS).forEach(c => c.cities.forEach(([city,stad]) => cards.push(
+    `<div class="venue" style="--c:${c.color}">
+      <div class="venue-top"><span class="flag-badge" style="--c:${c.color}">${c.code}</span><span class="venue-city">${city}</span></div>
+      <div class="venue-stad">${stad}</div>
+    </div>`)));
+  document.getElementById('host-grid').innerHTML = cards.join('');
 }
 
 /* ---------------- PREDICTIONS ---------------- */
