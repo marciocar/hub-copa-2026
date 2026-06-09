@@ -8,9 +8,10 @@ Histórico das versões do Hub da Copa 2026. Todos os arquivos são **single-fil
 | 1 | [01-festivo-claro.html](01-festivo-claro.html) | Tema claro festivo (verde/amarelo/azul) | Apenas Grupo C real; A,B,D–L como "a definir" | Emoji 🇧🇷 | 22 KB |
 | 2 | [02-premium-dark-emoji.html](02-premium-dark-emoji.html) | Premium dark + glassmorphism + aurora | 12 grupos reais, estádios, mata-mata | Emoji 🇧🇷 | 30 KB |
 | 3 | [03-premium-badges-ATUAL.html](03-premium-badges-ATUAL.html) | Premium dark (idem v2) | 12 grupos reais, estádios, mata-mata | Medalhões FIFA (`BRA`) | 31 KB |
-| 4 | [04-jornada-brasil-FINAL.html](04-jornada-brasil-FINAL.html) ⭐ | Premium dark + **conceito-âncora** + cinematográfico | idem v3 + chaveamento vivo | Medalhões FIFA | ~50 KB |
+| 4 | [04-jornada-brasil-FINAL.html](04-jornada-brasil-FINAL.html) | Premium dark + **conceito-âncora** + cinematográfico | idem v3 + chaveamento vivo | Medalhões FIFA | ~64 KB |
+| 5 | [05-bastidores-showcase.html](05-bastidores-showcase.html) ⭐ | idem v4 + **seção Bastidores** (case study) | idem v4 | Medalhões FIFA | ~72 KB |
 
-⭐ = **versão final/atual** (cópia de `../copa-2026.html`).
+⭐ = **versão atual** (cópia de `../copa-2026.html`).
 
 ## Evolução / diferenças
 
@@ -44,8 +45,15 @@ da experiência — **"O caminho do Brasil até a taça"**:
 - Acessibilidade: tabs WAI-ARIA + teclado, `:focus-visible`, contraste AA, Open Graph/favicon.
   Tudo respeitando `prefers-reduced-motion` e mantendo single-file/offline.
 
+### 5 — Bastidores / showcase (atual) ⭐
+Tudo da v4, mais a correção do confete (anima sempre) e da lógica de botões do mata-mata
+(só o jogo atual decide; decididos mostram "↩ refazer"). Adiciona a seção **Bastidores**
+(item de menu novo): conta como o site foi feito — a estratégia Spec-as-Code de melhoria
+contínua (diagnóstico → spec → build → feedback → iterar), a evolução das versões e o
+ecossistema (Onion Portable, Marcio Carvalho, Grana.Ai, Arandek, Sacola de Ideias).
+
 ## Qual usar?
-- **Experiência completa (recomendada):** a **v4** (final) — o conceito-âncora.
+- **Experiência completa (recomendada):** a **v5** (atual) — conceito + bastidores.
 - **Só consulta/dados, mais leve:** a **v3**.
 - **Mac / Linux e quer bandeiras emoji reais:** a **v2**.
 - **Visual claro/festivo:** a **v1**.
