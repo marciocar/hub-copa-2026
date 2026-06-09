@@ -383,9 +383,13 @@
 
   /* evolução das versões */
   .subhead{font-size:.74rem;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);font-weight:800;margin:1rem 0 1.2rem}
-  .ver-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
-  @media(max-width:900px){.ver-grid{grid-template-columns:repeat(2,1fr)}}
+  .ver-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem}
   @media(max-width:520px){.ver-grid{grid-template-columns:1fr}}
+  .ver .vlink{display:inline-block;margin-top:.55rem;font-size:.8rem;font-weight:800;color:var(--green)}
+  a.ver{cursor:pointer}
+  .ver-all{display:inline-flex;align-items:center;gap:.4rem;margin-top:1.1rem;font-weight:800;font-size:.92rem;
+    color:var(--ink);background:var(--card);border:1px solid var(--card-brd);border-radius:999px;padding:.55rem 1.1rem;transition:.2s}
+  .ver-all:hover{border-color:rgba(31,209,122,.5);transform:translateY(-2px)}
   .ver{background:var(--card);border:1px solid var(--card-brd);border-radius:var(--radius);padding:1.3rem 1.2rem;
     backdrop-filter:blur(8px);transition:.25s;position:relative}
   .ver:hover{transform:translateY(-4px);border-color:rgba(43,107,255,.4)}
@@ -621,11 +625,14 @@
     <!-- evolução das versões -->
     <div class="subhead">A evolução das versões</div>
     <div class="ver-grid">
-      <div class="ver"><div class="tag">v1 · rascunho</div><div class="vname">Festivo claro</div><p>Tema claro vibrante. Só o Grupo C confirmado; demais grupos "a definir" (honestidade de dados).</p></div>
-      <div class="ver"><div class="tag">v2 · redesign</div><div class="vname">Premium dark</div><p>Aurora animada, glassmorphism, contadores e dados completos do sorteio FIFA. Bandeiras em emoji.</p></div>
-      <div class="ver"><div class="tag">v3 · robustez</div><div class="vname">Medalhões FIFA</div><p>Bandeiras viram medalhões (<code>BRA</code>, <code>ARG</code>…) — emoji de bandeira não renderiza no Windows.</p></div>
-      <div class="ver current"><span class="badge-now">Atual</span><div class="tag">v4 · conceito</div><div class="vname">Jornada do Brasil</div><p>O palpite vira o coração: chaveamento vivo, medidor de hype, takeover "Hexacampeão" com confete e card compartilhável.</p></div>
+      <a class="ver" href="versoes/01-festivo-claro.html" target="_blank" rel="noopener"><div class="tag">v1 · rascunho</div><div class="vname">Festivo claro</div><p>Tema claro vibrante. Só o Grupo C confirmado; demais grupos "a definir" (honestidade de dados).</p><span class="vlink">abrir →</span></a>
+      <a class="ver" href="versoes/02-premium-dark-emoji.html" target="_blank" rel="noopener"><div class="tag">v2 · redesign</div><div class="vname">Premium dark</div><p>Aurora animada, glassmorphism, contadores e dados completos do sorteio FIFA. Bandeiras em emoji.</p><span class="vlink">abrir →</span></a>
+      <a class="ver" href="versoes/03-premium-badges-ATUAL.html" target="_blank" rel="noopener"><div class="tag">v3 · robustez</div><div class="vname">Medalhões FIFA</div><p>Bandeiras viram medalhões (<code>BRA</code>, <code>ARG</code>…) — emoji de bandeira não renderiza no Windows.</p><span class="vlink">abrir →</span></a>
+      <a class="ver" href="versoes/04-jornada-brasil-FINAL.html" target="_blank" rel="noopener"><div class="tag">v4 · conceito</div><div class="vname">Jornada do Brasil</div><p>O palpite vira o coração: chaveamento vivo, medidor de hype, takeover "Hexacampeão" com confete.</p><span class="vlink">abrir →</span></a>
+      <a class="ver" href="versoes/05-bastidores-showcase.html" target="_blank" rel="noopener"><div class="tag">v5 · case study</div><div class="vname">Bastidores</div><p>Seção "Como foi feito": estratégia Spec-as-Code, evolução e o ecossistema do projeto.</p><span class="vlink">abrir →</span></a>
+      <a class="ver current" href="versoes/06-mata-mata-gold.html" target="_blank" rel="noopener"><span class="badge-now">Atual</span><div class="tag">v6 · GOLD</div><div class="vname">Mata-mata editável</div><p>Escolher adversário (anti-trapaça), placar e pênaltis; QR no card e preview social.</p><span class="vlink">abrir →</span></a>
     </div>
+    <a class="ver-all" href="https://github.com/marciocar/hub-copa-2026/tree/main/versoes" target="_blank" rel="noopener">📂 Ver todas as versões e o histórico no GitHub →</a>
 
     <!-- ecossistema / créditos -->
     <div class="subhead">O ecossistema por trás</div>

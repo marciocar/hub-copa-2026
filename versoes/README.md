@@ -9,7 +9,8 @@ Histórico das versões do Hub da Copa 2026. Todos os arquivos são **single-fil
 | 2 | [02-premium-dark-emoji.html](02-premium-dark-emoji.html) | Premium dark + glassmorphism + aurora | 12 grupos reais, estádios, mata-mata | Emoji 🇧🇷 | 30 KB |
 | 3 | [03-premium-badges-ATUAL.html](03-premium-badges-ATUAL.html) | Premium dark (idem v2) | 12 grupos reais, estádios, mata-mata | Medalhões FIFA (`BRA`) | 31 KB |
 | 4 | [04-jornada-brasil-FINAL.html](04-jornada-brasil-FINAL.html) | Premium dark + **conceito-âncora** + cinematográfico | idem v3 + chaveamento vivo | Medalhões FIFA | ~64 KB |
-| 5 | [05-bastidores-showcase.html](05-bastidores-showcase.html) ⭐ | idem v4 + **seção Bastidores** (case study) | idem v4 | Medalhões FIFA | ~72 KB |
+| 5 | [05-bastidores-showcase.html](05-bastidores-showcase.html) | idem v4 + **seção Bastidores** (case study) | idem v4 | Medalhões FIFA | ~72 KB |
+| 6 | [06-mata-mata-gold.html](06-mata-mata-gold.html) ⭐ | idem v5 + **mata-mata editável** + QR no card + preview social | idem v4 | Medalhões FIFA | ~94 KB |
 
 ⭐ = **versão atual** (cópia de `../copa-2026.html`).
 
@@ -52,8 +53,15 @@ Tudo da v4, mais a correção do confete (anima sempre) e da lógica de botões 
 contínua (diagnóstico → spec → build → feedback → iterar), a evolução das versões e o
 ecossistema (Onion Portable, Marcio Carvalho, Grana.Ai, Arandek, Sacola de Ideias).
 
+### 6 — Mata-mata GOLD (atual) ⭐
+Tudo da v5, mais o **mata-mata editável** ("UI/UX MASTER GOLD"): escolher o adversário de cada
+fase (modal com busca + trava anti-trapaça: sem Brasil, sem repetir/voltar quem caiu, com
+sugestões por fase), **placar** por jogo e **pênaltis** quando empata. O CTA passa a guiar
+("Ir para o próximo jogo"); o card ganha **QR code** do site e vira **og:image** (preview social).
+Inclui a migração de dados do localStorage antigo (string `win`/`lose` → objeto).
+
 ## Qual usar?
-- **Experiência completa (recomendada):** a **v5** (atual) — conceito + bastidores.
+- **Experiência completa (recomendada):** a **v6** (atual) — mata-mata editável + QR.
 - **Só consulta/dados, mais leve:** a **v3**.
 - **Mac / Linux e quer bandeiras emoji reais:** a **v2**.
 - **Visual claro/festivo:** a **v1**.
