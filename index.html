@@ -242,7 +242,9 @@
     padding:1rem 1.3rem;backdrop-filter:blur(8px);transition:.35s;position:relative;opacity:.45}
   .rung.reached{opacity:1;border-color:rgba(31,209,122,.45);
     background:linear-gradient(100deg,rgba(31,209,122,.10),var(--card))}
-  .rung.current{opacity:1;border-color:rgba(255,255,255,.22);box-shadow:0 0 0 1px rgba(43,107,255,.25)}
+  .rung.current{opacity:1;border-color:rgba(43,107,255,.55);box-shadow:0 0 0 1px rgba(43,107,255,.4),0 0 28px -6px rgba(43,107,255,.5);animation:pulseCur 2s ease-in-out infinite}
+  @keyframes pulseCur{0%,100%{box-shadow:0 0 0 1px rgba(43,107,255,.4),0 0 28px -6px rgba(43,107,255,.45)}50%{box-shadow:0 0 0 1px rgba(43,107,255,.7),0 0 38px -4px rgba(43,107,255,.8)}}
+  .rung.current .mini-btn.win{background:var(--grad-hero);color:#04210f;border-color:transparent}
   .rung{border-left:4px solid var(--opp,transparent)}
   .rung.final{border-style:solid}
   /* luzes de estádio quando a FINAL é a vez (entrada cinematográfica) */
@@ -857,33 +859,36 @@ function renderRoad(){
     txtEl.innerHTML = `Brasil <strong>classificado em ${ord}</strong> no Grupo C! Agora <b>você decide</b> cada mata-mata abaixo.`;
   }
 
-  // escada: reachable enquanto não houve eliminação e o Brasil está classificado
+  // escada SEQUENCIAL: só o próximo jogo fica ativo (guia o usuário até a final)
   const qualified = pos <= 3;
-  let blocked = !qualified;
+  let unlocked = qualified; // a fase só abre se a anterior foi vencida
   ladder.innerHTML = ROAD_STAGES.map(st => {
     const v = r[st.key];
-    const reachable = qualified && !blocked;
+    const reachable = unlocked;                 // jogável agora?
+    const current = reachable && !v;            // o passo atual (a decidir)
     const isChampion = st.key === 'final' && v === 'win';
+    const isFinal = st.key === 'final';
     let cls = 'rung';
-    if(st.key === 'final') cls += ' final';
+    if(isFinal) cls += ' final';
     if(v === 'win') cls += ' reached';
     if(isChampion) cls += ' champion';
     if(v === 'lose') cls += ' eliminated';
+    if(current) cls += ' current';
 
-    const ico = isChampion ? '🏆' : v==='win' ? '✅' : v==='lose' ? '❌' : '⚽';
+    const ico = isChampion ? '🏆' : v==='win' ? '✅' : v==='lose' ? '❌' : current ? '👉' : '🔒';
     const opp = PATH_OPP[st.key];
     const oppLine = opp ? `<div class="opp"><span class="vs">Brasil ×</span> ${badge(opp)} ${opp.name}</div>` : '';
     const note = isChampion ? '⭐ É CAMPEÃO! Brasil no topo do mundo'
       : v==='lose' ? `Fim da linha — eliminado pela ${opp ? opp.name : 'adversária'}`
       : v==='win' ? 'Brasil avançou! 🎉'
-      : reachable ? 'Sua vez: o Brasil passa?'
+      : current && isFinal ? '🔥 É A FINAL! Clique em “Brasil vence” para erguer a taça'
+      : current ? '👉 Sua vez: o Brasil passa?'
       : 'Trave o jogo anterior para chegar aqui';
     const actions = reachable ? `
         <button class="mini-btn win ${v==='win'?'on':''}" data-stage="${st.key}" data-r="win" aria-pressed="${v==='win'}">Brasil vence</button>
         <button class="mini-btn lose ${v==='lose'?'on':''}" data-stage="${st.key}" data-r="lose" aria-pressed="${v==='lose'}">Brasil cai</button>` : '';
 
-    if(reachable && !v) cls += ' current';
-    if(v === 'lose') blocked = true; // trava as fases seguintes
+    unlocked = unlocked && v === 'win'; // libera a próxima só se venceu esta
 
     return `
       <div class="${cls}" style="--opp:${(v||reachable)&&opp?opp.color:'transparent'}">
@@ -891,7 +896,7 @@ function renderRoad(){
         <div>
           <div class="stage-name">${st.name}</div>
           ${oppLine}
-          <div class="stage-sub" style="${isChampion?'color:var(--yellow);font-weight:800':''}">${note}</div>
+          <div class="stage-sub" style="${isChampion?'color:var(--yellow);font-weight:800':current&&isFinal?'color:var(--yellow);font-weight:800':''}">${note}</div>
           <div class="stage-sub">${st.sub}</div>
         </div>
         <div class="stage-actions">${actions}</div>
@@ -1093,7 +1098,6 @@ let confettiRAF = 0;
 function fireChampion(){
   const fx = document.getElementById('champ-fx');
   fx.classList.add('open');
-  if(matchMedia('(prefers-reduced-motion: reduce)').matches) return; // sem confete, só o banner
   const c = document.getElementById('confetti');
   if(!c || !c.getContext) return;
   const x = c.getContext('2d');
@@ -1101,11 +1105,22 @@ function fireChampion(){
   const W = window.innerWidth, H = window.innerHeight;
   c.width = W*dpr; c.height = H*dpr; x.setTransform(dpr,0,0,dpr,0,0);
   const colors = ['#1fd17a','#ffd60a','#2b6bff','#ff4d8d','#ffffff'];
-  const parts = Array.from({length:170}, () => ({
-    x: W/2 + (Math.random()-.5)*W*.4, y: H*.42,
-    vx: (Math.random()-.5)*14, vy: -(Math.random()*11+5),
-    s: 4+Math.random()*7, c: colors[(Math.random()*colors.length)|0],
-    rot: Math.random()*6, vr: (Math.random()-.5)*.4
+  // Acessibilidade: com "reduzir movimento", celebra com confete ESTÁTICO (sem animação).
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches){
+    x.clearRect(0,0,W,H);
+    for(let i=0;i<260;i++){
+      const px=Math.random()*W, py=Math.random()*H, s=5+Math.random()*9;
+      x.save(); x.translate(px,py); x.rotate(Math.random()*6);
+      x.globalAlpha=.9; x.fillStyle=colors[(Math.random()*colors.length)|0];
+      x.fillRect(-s/2,-s/2,s,s*.62); x.restore();
+    }
+    return;
+  }
+  const parts = Array.from({length:240}, () => ({
+    x: W/2 + (Math.random()-.5)*W*.55, y: H*.45,
+    vx: (Math.random()-.5)*17, vy: -(Math.random()*13+6),
+    s: 5+Math.random()*8, c: colors[(Math.random()*colors.length)|0],
+    rot: Math.random()*6, vr: (Math.random()-.5)*.5
   }));
   const start = performance.now();
   cancelAnimationFrame(confettiRAF);
@@ -1113,11 +1128,12 @@ function fireChampion(){
     if(!fx.classList.contains('open')){ x.clearRect(0,0,W,H); return; }
     x.clearRect(0,0,W,H);
     parts.forEach(p => {
-      p.vy += .2; p.x += p.vx; p.y += p.vy; p.rot += p.vr;
+      p.vy += .22; p.x += p.vx; p.y += p.vy; p.rot += p.vr;
+      if(p.y > H+20){ p.y = -20; p.x = Math.random()*W; p.vy = Math.random()*4+2; } // reaproveita (chuva contínua)
       x.save(); x.translate(p.x,p.y); x.rotate(p.rot);
       x.fillStyle = p.c; x.fillRect(-p.s/2,-p.s/2,p.s,p.s*.62); x.restore();
     });
-    if(now-start < 5000) confettiRAF = requestAnimationFrame(frame);
+    if(now-start < 6500) confettiRAF = requestAnimationFrame(frame);
     else x.clearRect(0,0,W,H);
   })(start);
 }
