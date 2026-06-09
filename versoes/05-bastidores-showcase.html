@@ -944,7 +944,15 @@ const ROAD_STAGES = [
   {key:'sf',    name:'Semifinal',        sub:'14–15 jul · Dallas/Atlanta'},
   {key:'final', name:'FINAL · MetLife',  sub:'19 jul · Nova Jersey'}
 ];
-function loadRoad(){ try{ return JSON.parse(localStorage.getItem(ROAD_KEY)) || {}; }catch(e){ return {}; } }
+function loadRoad(){
+  try{
+    const r = JSON.parse(localStorage.getItem(ROAD_KEY)) || {};
+    // migração: versões antigas guardavam strings ('win'/'lose'); o modelo novo usa objetos.
+    // descarta qualquer valor que não seja objeto, evitando "Cannot create property 'opp' on string".
+    Object.keys(r).forEach(k => { if(!r[k] || typeof r[k] !== 'object') delete r[k]; });
+    return r;
+  }catch(e){ return {}; }
+}
 function saveRoad(r){ try{ localStorage.setItem(ROAD_KEY, JSON.stringify(r)); }catch(e){} }
 
 // Todas as 48 seleções (com a letra do grupo) — pool do seletor de adversário
