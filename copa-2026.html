@@ -884,9 +884,15 @@ function renderRoad(){
       : current && isFinal ? '🔥 É A FINAL! Clique em “Brasil vence” para erguer a taça'
       : current ? '👉 Sua vez: o Brasil passa?'
       : 'Trave o jogo anterior para chegar aqui';
-    const actions = reachable ? `
-        <button class="mini-btn win ${v==='win'?'on':''}" data-stage="${st.key}" data-r="win" aria-pressed="${v==='win'}">Brasil vence</button>
-        <button class="mini-btn lose ${v==='lose'?'on':''}" data-stage="${st.key}" data-r="lose" aria-pressed="${v==='lose'}">Brasil cai</button>` : '';
+    // só o jogo ATUAL mostra as escolhas; os já decididos mostram "refazer"
+    let actions = '';
+    if(current){
+      actions = `
+        <button class="mini-btn win" data-stage="${st.key}" data-r="win">Brasil vence</button>
+        <button class="mini-btn lose" data-stage="${st.key}" data-r="lose">Brasil cai</button>`;
+    } else if(v){ // decidido (venceu ou caiu)
+      actions = `<button class="mini-btn redo" data-stage="${st.key}" data-r="reset" aria-label="Refazer a partir de ${st.name}">↩ refazer</button>`;
+    }
 
     unlocked = unlocked && v === 'win'; // libera a próxima só se venceu esta
 
@@ -933,12 +939,11 @@ function buildRoad(){
     if(!btn) return;
     const r = loadRoad();
     const stage = btn.dataset.stage, res = btn.dataset.r;
-    // toggle: clicar de novo no mesmo desfaz
-    if(r[stage] === res) delete r[stage];
-    else r[stage] = res;
-    // ao mudar uma rodada, limpa as seguintes (a história muda dali pra frente)
+    // mudar/refazer uma rodada limpa todas as seguintes (a história muda dali pra frente)
     const idx = ROAD_STAGES.findIndex(s => s.key === stage);
     ROAD_STAGES.slice(idx+1).forEach(s => { delete r[s.key]; });
+    if(res === 'reset') delete r[stage];      // ↩ refazer este jogo
+    else r[stage] = res;                       // 'win' | 'lose'
     saveRoad(r);
     const becameChampion = stage === 'final' && r.final === 'win';
     renderRoad();
@@ -1105,21 +1110,11 @@ function fireChampion(){
   const W = window.innerWidth, H = window.innerHeight;
   c.width = W*dpr; c.height = H*dpr; x.setTransform(dpr,0,0,dpr,0,0);
   const colors = ['#1fd17a','#ffd60a','#2b6bff','#ff4d8d','#ffffff'];
-  // Acessibilidade: com "reduzir movimento", celebra com confete ESTÁTICO (sem animação).
-  if(matchMedia('(prefers-reduced-motion: reduce)').matches){
-    x.clearRect(0,0,W,H);
-    for(let i=0;i<260;i++){
-      const px=Math.random()*W, py=Math.random()*H, s=5+Math.random()*9;
-      x.save(); x.translate(px,py); x.rotate(Math.random()*6);
-      x.globalAlpha=.9; x.fillStyle=colors[(Math.random()*colors.length)|0];
-      x.fillRect(-s/2,-s/2,s,s*.62); x.restore();
-    }
-    return;
-  }
+  // confete cai do topo da tela (chuva contínua) — animado sempre (celebração disparada por clique)
   const parts = Array.from({length:240}, () => ({
-    x: W/2 + (Math.random()-.5)*W*.55, y: H*.45,
-    vx: (Math.random()-.5)*17, vy: -(Math.random()*13+6),
-    s: 5+Math.random()*8, c: colors[(Math.random()*colors.length)|0],
+    x: Math.random()*W, y: Math.random()*-H,           // começa acima da tela, espalhado
+    vx: (Math.random()-.5)*4, vy: Math.random()*4+3,    // cai
+    s: 6+Math.random()*8, c: colors[(Math.random()*colors.length)|0],
     rot: Math.random()*6, vr: (Math.random()-.5)*.5
   }));
   const start = performance.now();
@@ -1128,12 +1123,12 @@ function fireChampion(){
     if(!fx.classList.contains('open')){ x.clearRect(0,0,W,H); return; }
     x.clearRect(0,0,W,H);
     parts.forEach(p => {
-      p.vy += .22; p.x += p.vx; p.y += p.vy; p.rot += p.vr;
-      if(p.y > H+20){ p.y = -20; p.x = Math.random()*W; p.vy = Math.random()*4+2; } // reaproveita (chuva contínua)
+      p.vy += .05; p.x += p.vx + Math.sin((p.y+p.rot*40)/40)*0.8; p.y += p.vy; p.rot += p.vr; // leve balanço lateral
+      if(p.y > H+20){ p.y = -20; p.x = Math.random()*W; p.vy = Math.random()*4+3; } // reaproveita (chuva contínua)
       x.save(); x.translate(p.x,p.y); x.rotate(p.rot);
       x.fillStyle = p.c; x.fillRect(-p.s/2,-p.s/2,p.s,p.s*.62); x.restore();
     });
-    if(now-start < 6500) confettiRAF = requestAnimationFrame(frame);
+    if(now-start < 9000) confettiRAF = requestAnimationFrame(frame);
     else x.clearRect(0,0,W,H);
   })(start);
 }
