@@ -10,6 +10,7 @@ Este diretório armazena o histórico e o progresso de cada sessão de desenvolv
 |---|---|---|---|---|
 | 001 | 2026-06-08 23:02 | site-copa-2026 | Site HTML único (premium) da Copa 2026 + specs Spec-as-Code | [Abrir](./2026-06-08_2302_site-copa-2026/README.md) |
 | 002 | 2026-06-08 23:23 | redesign-premium-e-dados-completos | Redesign premium (dark/glass), dados completos online e fix de bandeiras no Windows | [Abrir](./2026-06-08_2323_redesign-premium-e-dados-completos/README.md) |
+| 003 | 2026-06-08 23:43 | awwwards-uplift | Elevar site a nível Awwwards SOTD: A11y (ARIA tabs + teclado, foco, contraste) + hero interativo | [Abrir](./2026-06-08_2343_awwwards-uplift/README.md) |
 
 
 ---
