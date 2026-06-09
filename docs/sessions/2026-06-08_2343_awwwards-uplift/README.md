@@ -29,6 +29,12 @@ Mention). Ataque faseado nos pontos fracos: **Creativity** (peso 20%) e **acessi
 ## ⏱️ Tempo Investido
 ~1 hora (diagnóstico + specs + implementação P1/P0).
 
+## 🚀 Deploy (2026-06-09)
+- Repo público novo: **https://github.com/marciocar/hub-copa-2026** (origin trocada de
+  `onion-portable` para `hub-copa-2026`).
+- **GitHub Pages ao vivo:** https://marciocar.github.io/hub-copa-2026/ (main / raiz, build `built`, HTTP 200).
+- `index.html` = cópia do `copa-2026.html` para o Pages; versão final salva em `versoes/04-jornada-brasil-FINAL.html`.
+
 ## ⏭️ Próximos passos sugeridos
 - Rodar **Lighthouse** local (meta ≥ 90 nas 4 categorias) e validar contraste com ferramenta.
 - Avaliar P2: cursor customizado, page-transition/loading com personalidade, display font.
